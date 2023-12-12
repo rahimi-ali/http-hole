@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  http_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: http-server-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - TZ=${TIMEZONE:-Etc/UTC}
+  mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
+    ports:
+      - "${MONGODB_FORWARD_PORT:-27018}:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+  redis_data:

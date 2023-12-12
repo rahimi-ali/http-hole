@@ -1,0 +1,87 @@
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="stylesheet" href="/hole/static/feathercss/feather.min.css"/>
+    <link rel="stylesheet" href="/hole/static/styles/main.css"/>
+    <title>Webhook <%= webhook.path %></title>
+</head>
+<body>
+<div class="container">
+    <div class="card" style="width: 1200px; max-height: 90vh; overflow-y: auto">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+            <h1 style="max-width: 900px">Webhook /<%= webhook.path %></h1>
+
+            <div>
+                <button class="danger-button button" onclick="deleteWebhook()" style="width: 120px">Delete</button>
+                <a class="primary-button" href="/hole/webhooks/<%= webhook.path %>/edit" style="width: 120px">Edit</a>
+            </div>
+        </div>
+
+        <table id="calls-table" class="<%= calls.length === 0 ? 'hidden' : '' %>">
+            <thead>
+            <tr>
+                <th>Called At</th>
+                <th>Client IP</th>
+            </tr>
+            </thead>
+            <tbody id="calls-tbody">
+            <% calls.forEach(function(call) { %>
+                <tr class="clickable" onclick="showCall('<%= call._id.toString() %>')">
+                    <td><%= formatDate(call.createdAt) %></td>
+                    <td><%= call.clientIp %></td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+
+        <div id="no-calls-block" style="text-align: center; margin-top: 20px" class="<%= calls.length > 0 ? 'hidden' : '' %>">
+            <h3>No calls yet</h3>
+        </div>
+    </div>
+    <form id="deleteForm" style="display: none" action="/hole/webhooks/<%= webhook._id.toString() %>/delete"
+          method="POST"></form>
+</div>
+<script>
+  function deleteWebhook() {
+    if (confirm("Are you sure you want to delete this webhook?!")) {
+      document.getElementById('deleteForm').submit();
+    }
+  }
+
+  function showCall(id) {
+    window.location.href = "/hole/webhook-calls/" + id;
+  }
+
+  function showTable() {
+    document.getElementById('calls-table').classList.remove('hidden');
+    document.getElementById('no-calls-block').classList.add('hidden');
+  }
+</script>
+<script src="/hole/static/socketio/socket.io.min.js"></script>
+<script>
+  const socket = io();
+
+  socket.on("connect", () => {
+    console.log('socket connected');
+    socket.emit("subscribe", { clientId: 'Show Webhook Page', topic: '<%= webhook._id.toString() %>' });
+    console.log('subscribed to webhook');
+  });
+
+  socket.on("webhook-call", (call) => {
+    console.log(`webhook called : ${call._id}`);
+
+    showTable();
+    const tbody = document.getElementById('calls-tbody');
+
+    const tr = document.createElement('tr');
+    tr.className = 'clickable';
+    tr.onclick = () => showCall(call._id.toString());
+    tr.innerHTML = `
+        <td>${call.createdAtFormatted}</td>
+        <td>${call.clientIp}</td>
+    `;
+
+    tbody.prepend(tr);
+  });
+</script>
+</body>
+</html>

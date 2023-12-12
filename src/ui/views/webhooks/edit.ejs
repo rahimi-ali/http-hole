@@ -1,0 +1,38 @@
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="stylesheet" href="/hole/static/feathercss/feather.min.css"/>
+    <link rel="stylesheet" href="/hole/static/styles/main.css"/>
+    <title>Edit Webhook <%= webhook.path ;%></title>
+</head>
+<body>
+<div class="container">
+    <div class="card" style="width: 600px">
+        <h1>Edit Webhook <%= webhook.path ;%></h1>
+
+        <form action="/hole/webhooks/<%= webhook.path ;%>/edit" method="POST">
+            <label for="name">
+                <span class="label-text">Name</span>
+                <input type="text" id="name" name="name" value="<%= webhook.name ;%>" required style="width: 100%"/>
+                <% if (locals.errors && errors.name) { %>
+                    <span class="form-error-message"><%= errors.name ;%></span>
+                <% } %>
+            </label>
+
+
+            <label for="description">
+                <span class="label-text">Description</span>
+                <textarea id="description" name="description" rows="3"
+                          style="width: 100%"><%= webhook.description ;%></textarea>
+                <% if (locals.errors && errors.description) { %>
+                    <span class="form-error-message"><%= errors.description ;%></span>
+                <% } %>
+            </label>
+
+            <div style="text-align: center; margin-top: 20px">
+                <button class="primary-button" type="submit" style="width: 150px">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

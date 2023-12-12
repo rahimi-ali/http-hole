@@ -1,0 +1,61 @@
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="stylesheet" href="/hole/static/feathercss/feather.min.css"/>
+    <link rel="stylesheet" href="/hole/static/styles/main.css"/>
+    <title>Create Webhook</title>
+</head>
+<body>
+<div class="container">
+    <div class="card" style="width: 600px">
+        <h1>Create Webhook</h1>
+
+        <form action="/hole/webhooks/new" method="POST">
+            <label for="name">
+                <span class="label-text">Name</span>
+                <input type="text" id="name" name="name" value="<%= locals.old?.name || ''; %>" required
+                       style="width: 100%"/>
+                <% if (locals.errors && errors.name) { %>
+                    <span class="form-error-message"><%= errors.name; %></span>
+                <% } %>
+            </label>
+
+            <label for="path">
+                <span class="label-text">Path</span>
+                <div style="display: flex;">
+                    <input type="text" id="path" name="path" value="<%= locals.old?.path || ''; %>" required
+                           style="width: 100%"/>
+                    <button class="button" type="button" onclick="generateRandomPath()" title="Random">Random</button>
+                </div>
+                <% if (locals.errors && errors.path) { %>
+                    <span class="form-error-message"><%= errors.path; %></span>
+                <% } %>
+            </label>
+
+            <label for="description">
+                <span class="label-text">Description</span>
+                <textarea id="description" name="description" rows="3"
+                          style="width: 100%"><%= locals.old?.description || ''; %></textarea>
+                <% if (locals.errors && errors.description) { %>
+                    <span class="form-error-message"><%= errors.description; %></span>
+                <% } %>
+            </label>
+
+            <div style="text-align: center; margin-top: 20px">
+                <button class="primary-button" type="submit" style="width: 150px">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+  function generateRandomPath() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const length = 12;
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    document.getElementById('path').value = result;
+  }
+</script>
+</body>
+</html>

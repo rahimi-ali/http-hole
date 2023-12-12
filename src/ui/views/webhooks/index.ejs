@@ -1,0 +1,44 @@
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="stylesheet" href="/hole/static/feathercss/feather.min.css"/>
+    <link rel="stylesheet" href="/hole/static/styles/main.css"/>
+    <title>Create Webhook</title>
+</head>
+<body>
+<div class="container">
+    <div class="card" style="width: 1200px">
+        <div style="display: flex; justify-content: space-between; flex-grow: 0; align-items: center">
+            <h1>Webhooks</h1>
+            <a class="primary-button" href="/hole/webhooks/new">Add</a>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Path</th>
+                <th>Last Called At</th>
+                <th>Call Count</th>
+                <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% webhooks.forEach(function(webhook) { %>
+                <tr class="clickable" onclick="showWebhook('<%= webhook.path ;%>')">
+                    <td><%= webhook.name ;%></td>
+                    <td><%= webhook.path ;%></td>
+                    <td><%= webhook.lastCalledAt ? formatDate(webhook.lastCalledAt) : 'never' ;%></td>
+                    <td><%= webhook.callCount || 'never' ;%></td>
+                    <td><%= formatDate(webhook.createdAt) ;%></td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+  function showWebhook(path) {
+    window.location.href = '/hole/webhooks/' + path;
+  }
+</script>
+</body>
+</html>
