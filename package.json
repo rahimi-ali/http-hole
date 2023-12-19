@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "clean": "rimraf dist",
-    "copy-files": "copyfiles -u 1 src/**/*.css src/**/*.js dist",
+    "copy-files": "copyfiles -u 1 src/**/*.css src/**/*.js src/**/*.ejs dist",
     "build": "npm run clean && npm run copy-files && npx tsc",
     "http-server": "node dist/httpServer.js",
     "http-server-dev": "ts-node-dev -T src/httpServer.ts"

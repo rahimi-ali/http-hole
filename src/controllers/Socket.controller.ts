@@ -10,7 +10,11 @@ const onConnection = async (socket: Socket) => {
     if (ObjectId.isValid(subscriptionRequest.topic)) {
       id = subscriptionRequest.topic;
     } else {
-      id = (await findWebhookByPath(subscriptionRequest.topic))?._id?.toString();
+      const webhook = await findWebhookByPath(subscriptionRequest.topic);
+      if (!webhook) {
+        return;
+      }
+      id = webhook._id.toString();
     }
 
     socket.join(id);

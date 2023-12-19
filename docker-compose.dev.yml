@@ -5,26 +5,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: http-server-prod
+      target: http-server-dev
     ports:
       - "8000:8000"
     volumes:
       - .:/app
     environment:
       - TZ=${TIMEZONE:-Etc/UTC}
-    restart: always
-    env_file:
-      - .env
   mongodb:
     image: mongo
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_ROOT_USERNAME}"
-      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_ROOT_PASSWORD}"
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
     ports:
       - "${MONGODB_FORWARD_PORT:-27018}:27017"
     volumes:
       - mongodb_data:/data/db
-    restart: always
 
 volumes:
   mongodb_data:
+  redis_data:
